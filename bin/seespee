@@ -9,7 +9,11 @@ var AssetGraph = require('assetgraph'),
         .demand(1)
         .argv;
 
+var seenError = false;
 new AssetGraph({root: commandLineOptions.root})
+    .on('error', function () {
+        seenError = true;
+    })
     .logEvents({afterTransform: false})
     .loadAssets(commandLineOptions._.map(function (urlOrFsPath) {
         if (/^[a-z+-]+:\/\//i.test(urlOrFsPath)) {
@@ -22,4 +26,9 @@ new AssetGraph({root: commandLineOptions.root})
         include: commandLineOptions.include,
         ignoreMeta: commandLineOptions.ignoremeta
     }))
+    .queue(function (assetGraph) {
+        if (seenError || assetGraph.findAssets({type: 'ContentSecurityPolicy'}).length === 0) {
+            process.exit(1);
+        }
+    })
     .run();
