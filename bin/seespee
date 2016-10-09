@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+var AssetGraph = require('assetgraph'),
+    urlTools = require('urltools'),
+    commandLineOptions = require('optimist')
+        .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <htmlFile>...')
+        .boolean('ignoreexisting')
+        .string('include')
+        .demand(1)
+        .argv;
+
+new AssetGraph({root: commandLineOptions.root})
+    .loadAssets(commandLineOptions._.map(function (urlOrFsPath) {
+        if (/^[a-z+-]+:\/\//i.test(urlOrFsPath)) {
+            return urlOrFsPath;
+        } else {
+            return urlTools.fsFilePathToFileUrl(urlOrFsPath);
+        }
+    }))
+    .queue(require('../lib/seespee')({
+        include: commandLineOptions.include,
+        ignoreMeta: commandLineOptions.ignoremeta
+    }))
+    .run();

@@ -1,0 +1,42 @@
+{
+  "name": "seespee",
+  "version": "1.0.0",
+  "description": "Create a Content-Security-Policy for a website based on the statically decidable relations",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint .",
+    "travis": "npm test && npm run lint && npm run coverage && (<coverage/lcov.info coveralls || true)",
+    "coverage": "nyc --reporter=lcov --reporter=text --all -- mocha && echo google-chrome coverage/lcov-report/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/papandreou/seespee/"
+  },
+  "keywords": [
+    "CSP",
+    "Content-Security-Policy",
+    "XSS"
+  ],
+  "author": "Andreas Lind <andreas@one.com>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "assetgraph": "3.0.0-22",
+    "optimist": "0.6.1",
+    "urltools": "0.2.1"
+  },
+  "directories": {
+    "lib": "lib",
+    "bin": "bin"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.14",
+    "eslint": "^3.7.1",
+    "eslint-config-onelint": "^1.1.0",
+    "mocha": "^3.1.0",
+    "nyc": "8.3.1",
+    "sinon": "1.17.6",
+    "unexpected": "^10.18.1",
+    "unexpected-mitm": "^9.3.0",
+    "unexpected-sinon": "10.5.0"
+  }
+}
