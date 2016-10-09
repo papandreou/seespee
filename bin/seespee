@@ -10,6 +10,7 @@ var AssetGraph = require('assetgraph'),
         .argv;
 
 new AssetGraph({root: commandLineOptions.root})
+    .logEvents({afterTransform: false})
     .loadAssets(commandLineOptions._.map(function (urlOrFsPath) {
         if (/^[a-z+-]+:\/\//i.test(urlOrFsPath)) {
             return urlOrFsPath;
