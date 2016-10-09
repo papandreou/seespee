@@ -40,12 +40,6 @@ $ seespee --include "script-src 'self'; object-src 'none'; style-src 'self'" htt
 Content-Security-Policy: script-src 'self'; object-src 'none'; style-src 'self'; img-src news.ycombinator.com
 ```
 
-
-TODO
-====
-
-* Handle HTTP redirects as per https://www.w3.org/TR/CSP2/#source-list-paths-and-redirects
-
 License
 =======
 

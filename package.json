@@ -20,7 +20,7 @@
   "author": "Andreas Lind <andreas@one.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "assetgraph": "3.0.0-22",
+    "assetgraph": "3.0.0-24",
     "optimist": "0.6.1",
     "urltools": "0.2.1"
   },
