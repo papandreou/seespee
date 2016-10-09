@@ -53,6 +53,68 @@ describe('seespee', function () {
         });
     });
 
+    it('should follow http redirects to the same origin', function () {
+        return expect(function () {
+            return new AssetGraph()
+                .loadAssets('http://www.example.com/')
+                .queue(seespee(config));
+        }, 'with http mocked out', [
+            {
+                request: 'GET http://www.example.com/',
+                response: {
+                    statusCode: 302,
+                    headers: {
+                        Location: 'http://www.example.com/somewhere/'
+                    }
+                }
+            },
+            {
+                request: 'GET http://www.example.com/somewhere/',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8'
+                    },
+                    body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
+                }
+            }
+        ], 'not to error').then(function () {
+            expect(fakeConsole.log, 'to have calls satisfying', function () {
+                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+            });
+        });
+    });
+
+    it('should follow http redirects to other origins', function () {
+        return expect(function () {
+            return new AssetGraph()
+                .loadAssets('http://www.example.com/')
+                .queue(seespee(config));
+        }, 'with http mocked out', [
+            {
+                request: 'GET http://www.example.com/',
+                response: {
+                    statusCode: 302,
+                    headers: {
+                        Location: 'http://www.somewhereelse.com/'
+                    }
+                }
+            },
+            {
+                request: 'GET http://www.somewhereelse.com/',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8'
+                    },
+                    body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
+                }
+            }
+        ], 'not to error').then(function () {
+            expect(fakeConsole.log, 'to have calls satisfying', function () {
+                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+            });
+        });
+    });
+
     it('should support an existing policy given as a string', function () {
         config.include = "script-src 'self'; object-src 'none'";
         return expect(function () {
