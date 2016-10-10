@@ -49,7 +49,7 @@ describe('seespee', function () {
             }
         ], 'not to error').then(function () {
             expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.log("Content-Security-Policy: style-src http://www.example.com/styles.css; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+                fakeConsole.log("Content-Security-Policy: default-src 'none'; style-src http://www.example.com/styles.css; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
             });
         });
     });
@@ -81,7 +81,7 @@ describe('seespee', function () {
         ], 'not to error').then(function () {
             expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
                 fakeConsole.warn('Redirected to', 'http://www.example.com/somewhere/');
-                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+                fakeConsole.log("Content-Security-Policy: default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
             });
         });
     });
@@ -113,7 +113,7 @@ describe('seespee', function () {
         ], 'not to error').then(function () {
             expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
                 fakeConsole.warn('Redirected to', 'http://www.somewhereelse.com/');
-                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+                fakeConsole.log("Content-Security-Policy: default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
             });
         });
     });
