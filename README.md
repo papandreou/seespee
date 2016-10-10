@@ -15,7 +15,7 @@ be listed by their origin. Inline scripts and stylesheets with be hashed so
 ```
 $ npm install -g seespee
 $ seespee https://news.ycombinator.com/
-Content-Security-Policy: default-src 'none'; img-src news.ycombinator.com; style-src https://news.ycombinator.com/news.css?0jKc9Keyn2Zl7D1UAQcy; script-src https://news.ycombinator.com/hn.js?0jKc9Keyn2Zl7D1UAQcy```
+Content-Security-Policy: default-src 'none'; img-src news.ycombinator.com; style-src https://news.ycombinator.com/news.css?0jKc9Keyn2Zl7D1UAQcy; script-src https://news.ycombinator.com/hn.js?0jKc9Keyn2Zl7D1UAQcy
 ```
 
 It also works with a website located in a directory on a file system:
