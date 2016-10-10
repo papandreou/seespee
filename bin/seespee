@@ -4,7 +4,7 @@ var AssetGraph = require('assetgraph'),
     urlTools = require('urltools'),
     commandLineOptions = require('optimist')
         .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <htmlFile>...')
-        .boolean('ignoreexisting')
+        .boolean('ignoremeta')
         .string('include')
         .demand(1)
         .argv;
