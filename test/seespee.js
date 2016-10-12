@@ -49,7 +49,7 @@ describe('seespee', function () {
             }
         ], 'not to error').then(function () {
             expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.log("Content-Security-Policy: default-src 'none'; style-src http://www.example.com; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
+                fakeConsole.log("Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='");
             });
         });
     });
@@ -119,7 +119,7 @@ describe('seespee', function () {
     });
 
     it('should support an existing policy given as a string', function () {
-        config.include = "script-src 'self'; object-src 'none'";
+        config.include = "script-src foobar.com; object-src 'none'";
         return expect(function () {
             return new AssetGraph()
                 .loadAssets('http://www.example.com/index.html')
@@ -150,7 +150,7 @@ describe('seespee', function () {
             }
         ], 'not to error').then(function () {
             expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.log("Content-Security-Policy: script-src 'self' 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI='; object-src 'none'; style-src http://www.example.com");
+                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' foobar.com; object-src 'none'; style-src 'self'");
             });
         });
     });
