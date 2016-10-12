@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-var AssetGraph = require('assetgraph'),
-    urlTools = require('urltools'),
-    commandLineOptions = require('optimist')
-        .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <htmlFile>...')
-        .boolean('ignoremeta')
-        .string('include')
-        .demand(1)
-        .argv;
+var AssetGraph = require('assetgraph');
+var urlTools = require('urltools');
+var commandLineOptions = require('optimist')
+    .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <htmlFile>...')
+    .boolean('ignoremeta')
+    .string('include')
+    .demand(1)
+    .argv;
 
 var seenError = false;
 new AssetGraph({root: commandLineOptions.root})
