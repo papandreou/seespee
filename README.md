@@ -15,7 +15,7 @@ be listed by their origin. Inline scripts and stylesheets with be hashed so
 ```
 $ npm install -g seespee
 $ seespee https://news.ycombinator.com/
-Content-Security-Policy: default-src 'none'; style-src https://news.ycombinator.com; img-src https://news.ycombinator.com; script-src https://news.ycombinator.com
+Content-Security-Policy: default-src 'none'; style-src 'self'; img-src 'self'; script-src 'self'
 ```
 
 It also works with a website located in a directory on a file system:
@@ -37,7 +37,7 @@ already whitelisted by eg. `'self'`:
 
 ```
 $ seespee --include "default-src 'none'; style-src *" https://news.ycombinator.com/
-Content-Security-Policy: default-src 'none'; style-src *; img-src https://news.ycombinator.com; script-src https://news.ycombinator.com
+Content-Security-Policy: default-src 'none'; style-src *; img-src 'self'; script-src 'self'
 ```
 
 License
