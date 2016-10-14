@@ -7,7 +7,7 @@ seespee
 [![Dependency Status](https://david-dm.org/papandreou/seespee.svg)](https://david-dm.org/papandreou/seespee)
 
 Generate a `Content-Security-Policy` header for a website. The website is crawled
-for scripts, stylesheets, images, fonts, appcache manifests etc., which will
+for scripts, stylesheets, images, fonts, application manifests etc., which will
 be listed by their origin. Inline scripts and stylesheets with be hashed so
 `'unsafe-inline'` can be avoided.
 
