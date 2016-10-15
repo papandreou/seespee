@@ -33,7 +33,7 @@ parameter.
 You can also specify custom directives to include on the command line via
 the `--include` switch. The provided directives will be taken into account
 when adding new ones so you won't end up with redundant entries that are
-already whitelisted by eg. `'self'`:
+already whitelisted by eg. `*`:
 
 ```
 $ seespee --include "default-src 'none'; style-src *" https://news.ycombinator.com/
