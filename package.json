@@ -39,5 +39,10 @@
     "nyc": "8.3.1",
     "unexpected": "^10.18.1",
     "unexpected-mitm": "^9.3.0"
+  },
+  "nyc": {
+    "include": [
+      "lib/**"
+    ]
   }
 }
