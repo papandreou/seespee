@@ -1,28 +1,12 @@
 var expect = require('unexpected')
-    .use(require('unexpected-mitm'))
-    .use(require('unexpected-sinon'));
+    .use(require('unexpected-mitm'));
 
 var seespee = require('../lib/seespee');
 
-var AssetGraph = require('assetgraph');
-var sinon = require('sinon');
-
 describe('seespee', function () {
-    var config;
-    var fakeConsole;
-    beforeEach(function () {
-        config = {};
-        config.console = fakeConsole = {
-            log: sinon.spy().named('fakeConsole.log'),
-            warn: sinon.spy().named('fakeConsole.warn')
-        };
-    });
-
     it('should populate from an external host', function () {
         return expect(function () {
-            return new AssetGraph()
-                .loadAssets('http://www.example.com/index.html')
-                .queue(seespee(config));
+            return seespee('http://www.example.com/index.html');
         }, 'with http mocked out', [
             {
                 request: 'GET http://www.example.com/index.html',
@@ -47,18 +31,18 @@ describe('seespee', function () {
                     body: 'body {color: maroon;}'
                 }
             }
-        ], 'not to error').then(function () {
-            expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.log("Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'");
-            });
+        ], 'not to error').then(function (result) {
+            expect(
+                result.contentSecurityPolicy,
+                'to equal',
+                "default-src 'none'; style-src 'self'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
+            );
         });
     });
 
     it('should follow http redirects to the same origin', function () {
         return expect(function () {
-            return new AssetGraph()
-                .loadAssets('http://www.example.com/')
-                .queue(seespee(config));
+            return seespee('http://www.example.com/');
         }, 'with http mocked out', [
             {
                 request: 'GET http://www.example.com/',
@@ -78,19 +62,17 @@ describe('seespee', function () {
                     body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
                 }
             }
-        ], 'not to error').then(function () {
-            expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.warn('Redirected to', 'http://www.example.com/somewhere/');
-                fakeConsole.log("Content-Security-Policy: default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'");
+        ], 'not to error').then(function (result) {
+            expect(result, 'to satisfy', {
+                url: 'http://www.example.com/somewhere/',
+                contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
             });
         });
     });
 
     it('should follow http redirects to other origins', function () {
         return expect(function () {
-            return new AssetGraph()
-                .loadAssets('http://www.example.com/')
-                .queue(seespee(config));
+            return seespee('http://www.example.com/');
         }, 'with http mocked out', [
             {
                 request: 'GET http://www.example.com/',
@@ -110,20 +92,19 @@ describe('seespee', function () {
                     body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
                 }
             }
-        ], 'not to error').then(function () {
-            expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.warn('Redirected to', 'http://www.somewhereelse.com/');
-                fakeConsole.log("Content-Security-Policy: default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'");
+        ], 'not to error').then(function (result) {
+            expect(result, 'to satisfy', {
+                url: 'http://www.somewhereelse.com/',
+                contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
             });
         });
     });
 
     it('should support an existing policy given as a string', function () {
-        config.include = "script-src foobar.com; object-src 'none'";
         return expect(function () {
-            return new AssetGraph()
-                .loadAssets('http://www.example.com/index.html')
-                .queue(seespee(config));
+            return seespee('http://www.example.com/index.html', {
+                include: "script-src foobar.com; object-src 'none'"
+            });
         }, 'with http mocked out', [
             {
                 request: 'GET http://www.example.com/index.html',
@@ -148,9 +129,9 @@ describe('seespee', function () {
                     body: 'body {color: maroon;}'
                 }
             }
-        ], 'not to error').then(function () {
-            expect([fakeConsole.log, fakeConsole.warn], 'to have calls satisfying', function () {
-                fakeConsole.log("Content-Security-Policy: script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'");
+        ], 'not to error').then(function (result) {
+            expect(result, 'to satisfy', {
+                contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
             });
         });
     });

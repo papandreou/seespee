@@ -18,6 +18,11 @@ $ npm install -g seespee
 Content-Security-Policy: default-src 'none'; img-src 'self' data:; manifest-src 'self'; style-src 'self' https://unpkg.com; font-src https://unpkg.com; script-src 'self' 'sha256-85RLtUiAixnqFeQvOtsiq5HBnq4nAgtgmrVVlIrEwyk=' 'sha256-9gJ3aNComH+MFu3rw5sARPpvBPOF0VxLUsw1xjxmVzE=' 'sha256-Df4bY3tGwX4vCpgFJ2b7hL/F9h65FABZRCub2RYYOmU=' 'sha256-euGdatRFmkEGGSWO0jbpFAuN5709ZGDaFjCqNnYocQM=' 'unsafe-inline' https://embed.runkit.com https://unpkg.com
 ```
 
+```
+$ seespee https://github.com/
+Content-Security-Policy: default-src 'none'; style-src https://assets-cdn.github.com; img-src 'self' data: https://assets-cdn.github.com; font-src https://assets-cdn.github.com; script-src https://assets-cdn.github.com
+```
+
 It also works with a website located in a directory on a file system:
 
 ```
@@ -38,6 +43,43 @@ already whitelisted by eg. `*`:
 ```
 $ seespee --include "default-src 'none'; style-src *" https://news.ycombinator.com/
 Content-Security-Policy: default-src 'none'; style-src *; img-src 'self'; script-src 'self'
+```
+
+Programmatic usage
+==================
+
+```js
+var seespee = require('seespee');
+seespee('https://github.com/').then(function (result) {
+    console.log(result.contentSecurityPolicy);
+    // default-src \'none\'; style-src https://assets-cdn.github.com; ...
+});
+```
+
+You can also pass an options object with the `include` and `ignoreMeta`
+properties:
+
+```js
+var seespee = require('seespee');
+seespee('https://github.com/', {
+    include: 'report-uri: /tell-what-happened/',
+    ignoreMeta: true
+}).then(function (result) {
+    // ...
+});
+```
+
+When processing files on disc, the `root` option is supported as well:
+
+```js
+var seespee = require('seespee');
+seespee('/path/to/my/website/main/index.html', {
+    root: '/path/to/my/website/',
+    include: 'report-uri: /tell-what-happened/',
+    ignoreMeta: true
+}).then(function (result) {
+    // ...
+});
 ```
 
 License

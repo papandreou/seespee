@@ -1,34 +1,31 @@
 #!/usr/bin/env node
 
-var AssetGraph = require('assetgraph');
-var urlTools = require('urltools');
+var seespee = require('../lib/seespee');
+var outputMessage = require('../lib/outputMessage');
 var commandLineOptions = require('optimist')
-    .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <htmlFile>...')
+    .usage('$0 [--root <inputRootDirectory>] [--ignoremeta] [--existingpolicy ...] <url|pathToHtml>')
     .boolean('ignoremeta')
     .string('include')
     .demand(1)
     .argv;
 
-var seenError = false;
-new AssetGraph({root: commandLineOptions.root})
-    .on('error', function () {
-        seenError = true;
-    })
-    .logEvents({afterTransform: false})
-    .loadAssets(commandLineOptions._.map(function (urlOrFsPath) {
-        if (/^[a-z+-]+:\/\//i.test(urlOrFsPath)) {
-            return urlOrFsPath;
-        } else {
-            return urlTools.fsFilePathToFileUrl(urlOrFsPath);
-        }
-    }))
-    .queue(require('../lib/seespee')({
-        include: commandLineOptions.include,
-        ignoreMeta: commandLineOptions.ignoremeta
-    }))
-    .queue(function (assetGraph) {
-        if (seenError || assetGraph.findAssets({type: 'ContentSecurityPolicy'}).length === 0) {
-            process.exit(1);
-        }
-    })
-    .run();
+seespee(commandLineOptions._[0], {
+    include: commandLineOptions.include,
+    ignoreMeta: commandLineOptions.ignoremeta,
+    root: commandLineOptions.root
+}).then(function (result) {
+    if (result.url !== result.originalUrl) {
+        console.warn('Redirected to', result.url);
+    }
+    ['error', 'warn'].forEach(function (severity) {
+        result[severity + 's'].forEach(function (error) {
+            outputMessage(error, severity);
+        });
+    });
+    console.log('Content-Security-Policy: ' + result.contentSecurityPolicy);
+    if (result.errors.length > 0) {
+        process.exit(1);
+    }
+}, function (err) {
+    throw err;
+});
