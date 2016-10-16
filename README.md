@@ -23,10 +23,13 @@ $ seespee https://github.com/
 Content-Security-Policy: default-src 'none'; style-src https://assets-cdn.github.com; img-src 'self' data: https://assets-cdn.github.com; font-src https://assets-cdn.github.com; script-src https://assets-cdn.github.com
 ```
 
-It also works with a website located in a directory on a file system:
+It also works with a website located in a directory on a file system.
+In that case, a `--root` option is supported, determing how root-relative
+urls are to be interpreted (if not given, it will be assumed to be the
+directory containing the HTML file):
 
 ```
-$ seespee --root /path/to/my/project /path/to/my/project/index.html
+$ seespee --root /path/to/my/project /path/to/my/project/main/index.html
 ```
 
 If the website has an existing `Content-Security-Policy` in a
@@ -69,7 +72,8 @@ seespee('https://github.com/', {
 });
 ```
 
-When processing files on disc, the `root` option is supported as well:
+When processing files on disc, the `root` option is supported as well
+(see above):
 
 ```js
 var seespee = require('seespee');
