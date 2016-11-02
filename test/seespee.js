@@ -4,6 +4,22 @@ var expect = require('unexpected')
 var seespee = require('../lib/seespee');
 
 describe('seespee', function () {
+    it('should complain if no HTML asset is found or redirected to', function () {
+        return expect(function () {
+            return seespee('http://www.example.com/');
+        }, 'with http mocked out', [
+            {
+                request: 'GET http://www.example.com/',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/plain; charset=utf-8'
+                    },
+                    body: 'foobar'
+                }
+            }
+        ], 'to be rejected with', new Error('checkAssets transform: No HTML assets found (http://www.example.com/)'));
+    });
+
     it('should populate from an external host', function () {
         return expect(function () {
             return seespee('http://www.example.com/index.html');
