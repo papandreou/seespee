@@ -8,7 +8,7 @@ seespee
 
 Generate a `Content-Security-Policy` header for a website. The website is crawled
 for scripts, stylesheets, images, fonts, application manifests etc., which will
-be listed by their origin. Inline scripts and stylesheets with be hashed so
+be listed by their origin. Inline scripts and stylesheets will be hashed so
 `'unsafe-inline'` can be avoided.
 
 
