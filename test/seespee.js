@@ -1,29 +1,33 @@
-var expect = require('unexpected')
-    .use(require('unexpected-mitm'));
+var expect = require('unexpected').clone();
 
 var seespee = require('../lib/seespee');
+var httpception = require('httpception');
 
 describe('seespee', function () {
+    beforeEach(function () {
+        httpception();
+    });
+
     it('should complain if no HTML asset is found or redirected to', function () {
-        return expect(function () {
-            return seespee('http://www.example.com/');
-        }, 'with http mocked out', [
-            {
-                request: 'GET http://www.example.com/',
-                response: {
-                    headers: {
-                        'Content-Type': 'text/plain; charset=utf-8'
-                    },
-                    body: 'foobar'
-                }
+        httpception({
+            request: 'GET http://www.example.com/',
+            response: {
+                headers: {
+                    'Content-Type': 'text/plain; charset=utf-8'
+                },
+                body: 'foobar'
             }
-        ], 'to be rejected with', new Error('checkAssets transform: No HTML assets found (http://www.example.com/)'));
+        });
+
+        return expect(
+            () => seespee('http://www.example.com/'),
+            'to be rejected with',
+            new Error('checkAssets transform: No HTML assets found (http://www.example.com/)')
+        );
     });
 
     it('should populate from an external host', function () {
-        return expect(function () {
-            return seespee('http://www.example.com/index.html');
-        }, 'with http mocked out', [
+        httpception([
             {
                 request: 'GET http://www.example.com/index.html',
                 response: {
@@ -47,7 +51,9 @@ describe('seespee', function () {
                     body: 'body {color: maroon;}'
                 }
             }
-        ], 'not to error').then(function (result) {
+        ]);
+
+        return seespee('http://www.example.com/index.html').then(function (result) {
             expect(
                 result.contentSecurityPolicy,
                 'to equal',
@@ -57,9 +63,7 @@ describe('seespee', function () {
     });
 
     it('should follow http redirects to the same origin', function () {
-        return expect(function () {
-            return seespee('http://www.example.com/');
-        }, 'with http mocked out', [
+        httpception([
             {
                 request: 'GET http://www.example.com/',
                 response: {
@@ -78,7 +82,9 @@ describe('seespee', function () {
                     body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
                 }
             }
-        ], 'not to error').then(function (result) {
+        ]);
+
+        return seespee('http://www.example.com/').then(function (result) {
             expect(result, 'to satisfy', {
                 url: 'http://www.example.com/somewhere/',
                 contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
@@ -87,9 +93,7 @@ describe('seespee', function () {
     });
 
     it('should follow http redirects to other origins', function () {
-        return expect(function () {
-            return seespee('http://www.example.com/');
-        }, 'with http mocked out', [
+        httpception([
             {
                 request: 'GET http://www.example.com/',
                 response: {
@@ -108,7 +112,9 @@ describe('seespee', function () {
                     body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>'
                 }
             }
-        ], 'not to error').then(function (result) {
+        ]);
+
+        return seespee('http://www.example.com/').then(function (result) {
             expect(result, 'to satisfy', {
                 url: 'http://www.somewhereelse.com/',
                 contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
@@ -117,11 +123,7 @@ describe('seespee', function () {
     });
 
     it('should support an existing policy given as a string', function () {
-        return expect(function () {
-            return seespee('http://www.example.com/index.html', {
-                include: "script-src foobar.com; object-src 'none'"
-            });
-        }, 'with http mocked out', [
+        httpception([
             {
                 request: 'GET http://www.example.com/index.html',
                 response: {
@@ -145,7 +147,11 @@ describe('seespee', function () {
                     body: 'body {color: maroon;}'
                 }
             }
-        ], 'not to error').then(function (result) {
+        ]);
+
+        return seespee('http://www.example.com/index.html', {
+            include: "script-src foobar.com; object-src 'none'"
+        }).then(function (result) {
             expect(result, 'to satisfy', {
                 contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
             });
