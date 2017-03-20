@@ -222,7 +222,8 @@ describe('seespee', function () {
 
         return seespee('http://www.example.com/index.html').then(function (result) {
             expect(result, 'to satisfy', {
-                contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
+                contentSecurityPolicy: undefined,
+                contentSecurityPolicyReportOnly: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
             });
         });
     });

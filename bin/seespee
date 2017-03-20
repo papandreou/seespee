@@ -28,7 +28,12 @@ seespee(commandLineOptions._[0], {
             outputMessage(error, severity);
         });
     });
-    console.log('Content-Security-Policy: ' + result.contentSecurityPolicy);
+    if (result.contentSecurityPolicy || !result.contentSecurityPolicyReportOnly) {
+        console.log('Content-Security-Policy: ' + result.contentSecurityPolicy);
+    }
+    if (result.contentSecurityPolicyReportOnly) {
+        console.log('Content-Security-Policy-Report-Only: ' + result.contentSecurityPolicyReportOnly);
+    }
     if (result.errors.length > 0) {
         process.exit(1);
     }
