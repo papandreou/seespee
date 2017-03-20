@@ -48,6 +48,33 @@ $ seespee --include "default-src 'none'; style-src *" https://news.ycombinator.c
 Content-Security-Policy: default-src 'none'; style-src *; img-src 'self'; script-src 'self'
 ```
 
+CSP level
+=========
+
+You can tell seespee to target a specific CSP level by passing the `--level <number>`
+switch.
+
+The default is "somewhere in-between" -- to support as many browsers as possible,
+utilizing CSP 2 features that are known to fall back gracefully in browsers that
+only support CSP 1.
+
+If you target CSP level 1, inline scripts and stylesheets won't be hashed. If any
+are present, the dreaded `'unsafe-inline'` directive will be added instead.
+This saves a few bytes in the CSP, but sacrifices security with CSP level 2+ compliant
+browsers
+
+If you target CSP level 2, the full path of will be used when the most sensitive
+directives (`script-src`, `style-src`, `frame-src`, `object-src`, `manifest-src`,
+and `child-src`) refer to external hosts, addressing the weakness pointed out by
+https://blog.0daylabs.com/2016/09/09/bypassing-csp/
+Unfortunately cannot be the default because it breaks in Safari 8, 9, and 9.1,
+which don't support the full
+[CSP 1 source expression grammar](https://www.w3.org/TR/2012/CR-CSP-20121115/#source-list).
+You can use [express-legacy-csp](https://github.com/Munter/express-legacy-csp)
+to mitigate this.
+
+
+
 Programmatic usage
 ==================
 
