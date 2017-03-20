@@ -32,8 +32,8 @@ directory containing the HTML file):
 $ seespee --root /path/to/my/project /path/to/my/project/main/index.html
 ```
 
-If the website has an existing `Content-Security-Policy` in a
-[meta tag](https://www.w3.org/TR/CSP2/#delivery-html-meta-element)
+If the website has an existing `Content-Security-Policy` header or
+a [meta tag](https://www.w3.org/TR/CSP2/#delivery-html-meta-element)
 it will be detected and taken into account so all the existing directives
 are supported. This behavior can be disabled with the `--ignoreexisting`
 parameter.

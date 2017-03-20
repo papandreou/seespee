@@ -157,6 +157,76 @@ describe('seespee', function () {
         });
     });
 
+    it('should support an existing policy given as a Content-Security-Policy response header', function () {
+        httpception([
+            {
+                request: 'GET http://www.example.com/index.html',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8',
+                        'Content-Security-Policy': "script-src foobar.com; object-src 'none'"
+                    },
+                    body:
+                        '<!DOCTYPE html>' +
+                        '<html>' +
+                        '<head><link rel="stylesheet" href="styles.css"></head>' +
+                        '<body><script>alert("foo");</script></body>' +
+                        '</html>'
+                }
+            },
+            {
+                request: 'GET http://www.example.com/styles.css',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: 'body {color: maroon;}'
+                }
+            }
+        ]);
+
+        return seespee('http://www.example.com/index.html').then(function (result) {
+            expect(result, 'to satisfy', {
+                contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
+            });
+        });
+    });
+
+    it('should support an existing policy given as a Content-Security-Policy-Report-Only response header', function () {
+        httpception([
+            {
+                request: 'GET http://www.example.com/index.html',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8',
+                        'Content-Security-Policy-Report-Only': "script-src foobar.com; object-src 'none'"
+                    },
+                    body:
+                        '<!DOCTYPE html>' +
+                        '<html>' +
+                        '<head><link rel="stylesheet" href="styles.css"></head>' +
+                        '<body><script>alert("foo");</script></body>' +
+                        '</html>'
+                }
+            },
+            {
+                request: 'GET http://www.example.com/styles.css',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/css'
+                    },
+                    body: 'body {color: maroon;}'
+                }
+            }
+        ]);
+
+        return seespee('http://www.example.com/index.html').then(function (result) {
+            expect(result, 'to satisfy', {
+                contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
+            });
+        });
+    });
+
     describe('when targetting CSP level 1', function () {
         it('should add \'unsafe-inline\' when there are inline scripts and stylesheets, rather than hashes, which are level 2', function () {
             httpception([
