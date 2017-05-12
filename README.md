@@ -66,8 +66,10 @@ browsers
 If you target CSP level 2, the full path of will be used when the most sensitive
 directives (`script-src`, `style-src`, `frame-src`, `object-src`, `manifest-src`,
 and `child-src`) refer to external hosts, addressing the weakness pointed out by
-[https://blog.0daylabs.com/2016/09/09/bypassing-csp/]. Unfortunately this cannot be the
-default because it breaks in Safari 8, 9, and 9.1, which don't support the full
+[Bypassing path restriction on whitelisted CDNs to circumvent CSP protections -
+SECT CTF Web 400 writeup](https://blog.0daylabs.com/2016/09/09/bypassing-csp/).
+Unfortunately this cannot be the default because it breaks in Safari 8, 9, and 9.1,
+which don't support the full
 [CSP 1 source expression grammar](https://www.w3.org/TR/2012/CR-CSP-20121115/#source-list).
 You can use [express-legacy-csp](https://github.com/Munter/express-legacy-csp)
 to mitigate this.
