@@ -3,8 +3,9 @@
 var seespee = require('../lib/seespee');
 var outputMessage = require('../lib/outputMessage');
 var commandLineOptions = require('optimist')
-    .usage('$0 [--root <inputRootDirectory>] [--level <number>] [--ignoremeta] [--existingpolicy ...] <url|pathToHtml>')
+    .usage('$0 [--root <inputRootDirectory>] [--level <number>] [--ignoremeta] [--ignoreheader] [--existingpolicy ...] <url|pathToHtml>')
     .boolean('ignoremeta')
+    .boolean('ignoreheader')
     .string('include')
     .option({
         name: 'level',
@@ -17,6 +18,7 @@ var commandLineOptions = require('optimist')
 seespee(commandLineOptions._[0], {
     include: commandLineOptions.include,
     ignoreMeta: commandLineOptions.ignoremeta,
+    ignoreHeader: commandLineOptions.ignoreheader,
     root: commandLineOptions.root,
     level: commandLineOptions.level
 }).then(function (result) {

@@ -334,4 +334,30 @@ describe('seespee', function () {
             });
         });
     });
+
+    it('should honor the ignoreHeader option', function () {
+        httpception([
+            {
+                request: 'GET http://www.example.com/index.html',
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8',
+                        'Content-Security-Policy': 'style-src \'unsafe-inline\''
+                    },
+                    body:
+                        '<!DOCTYPE html>' +
+                        '<html>' +
+                        '<head><style>body{color:maroon}</style></head>' +
+                        '<body></body>' +
+                        '</html>'
+                }
+            }
+        ]);
+
+        return seespee('http://www.example.com/index.html', { ignoreHeader: true }).then(function (result) {
+            expect(result, 'to satisfy', {
+                contentSecurityPolicy: "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'"
+            });
+        });
+    });
 });
