@@ -22,7 +22,7 @@ describe('seespee', function () {
         return expect(
             () => seespee('http://www.example.com/'),
             'to be rejected with',
-            new Error('checkAssets transform: No HTML assets found (http://www.example.com/)')
+            new Error('No HTML assets found (http://www.example.com/)')
         );
     });
 
