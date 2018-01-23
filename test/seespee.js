@@ -329,7 +329,7 @@ describe('seespee', function () {
 
             return seespee('http://www.example.com/index.html', { level: 2 }).then(function (result) {
                 expect(result, 'to satisfy', {
-                    contentSecurityPolicy: "default-src 'none'; style-src https://cdn.example.com/styles.css; script-src https://cdn.example.com/script.js; img-src https://cdn.example.com"
+                    contentSecurityPolicy: "default-src 'none'; style-src cdn.example.com/styles.css; script-src cdn.example.com/script.js; img-src cdn.example.com"
                 });
             });
         });
