@@ -27,9 +27,8 @@
     "optimist": "0.6.1",
     "urltools": "0.2.1"
   },
-  "directories": {
-    "lib": "lib",
-    "bin": "bin"
+  "bin": {
+    "seespee": "lib/cli.js"
   },
   "devDependencies": {
     "coveralls": "^2.11.14",
