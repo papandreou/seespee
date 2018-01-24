@@ -23,7 +23,9 @@ async function run(commandAndArgs, stdin) {
                 if (exitCode === 0) {
                     resolve();
                 } else {
-                    reject(new Error(`Child process exited with ${exitCode}`));
+                    const err = new Error(`Child process exited with ${exitCode}`);
+                    err.exitCode = exitCode;
+                    reject(err);
                 }
             });
         }),
