@@ -76,7 +76,7 @@ describe('cli', function () {
                         'index.html'
                     )
                 )
-            ], 'to yield output', '');
+            ], 'to yield output', 'Content-Security-Policy: default-src \'none\'; script-src \'self\'\n');
         });
 
         it('should fail when some resources are not covered by the existing CSP', async function () {
