@@ -59,7 +59,7 @@ describe('cli', function () {
                     'index.html'
                 )
             )
-        ], 'to yield output', 'Content-Security-Policy: default-src \'none\'; script-src \'self\'\n');
+        ], 'to yield output', 'Content-Security-Policy:\n  default-src \'none\';\n  script-src \'self\';\n');
     });
 
     describe('in --validate mode', function () {
@@ -76,7 +76,7 @@ describe('cli', function () {
                         'index.html'
                     )
                 )
-            ], 'to yield output', 'Content-Security-Policy: default-src \'none\'; script-src \'self\'\n');
+            ], 'to yield output', 'Content-Security-Policy:\n  default-src \'none\';\n  script-src \'self\';\n');
         });
 
         it('should fail when some resources are not covered by the existing CSP', async function () {
