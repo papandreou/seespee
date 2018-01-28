@@ -92,7 +92,7 @@ describe('cli', function () {
                         'index.html'
                     )
                 )
-            ], 'to error with', 'Missing directives:\n  script-src \'self\'\n');
+            ], 'to error with', 'Missing directives:\n  script-src \'self\'\n    testdata/existingIncompleteCsp/script.js\n');
         });
 
         it('should fail when there is no CSP', async function () {
