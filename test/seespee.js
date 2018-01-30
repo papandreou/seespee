@@ -335,7 +335,7 @@ describe('seespee', function () {
         });
     });
 
-    it('should honor the ignoreHeader option', function () {
+    it('should honor the ignoreExisting option', function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -354,7 +354,7 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html', { ignoreHeader: true }).then(function (result) {
+        return seespee('http://www.example.com/index.html', { ignoreExisting: true }).then(function (result) {
             expect(result, 'to satisfy', {
                 contentSecurityPolicy: "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'"
             });
