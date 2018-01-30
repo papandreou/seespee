@@ -24,6 +24,8 @@
     "assetgraph": "github:assetgraph/assetgraph#1ca91536b46fe92724daa55fab4b90d3ce6fad43",
     "chalk": "1.1.3",
     "lodash": "^4.16.4",
+    "magicpen": "5.12.0",
+    "magicpen-prism": "github:unexpectedjs/magicpen-prism#feature/csp",
     "optimist": "0.6.1",
     "urltools": "0.2.1"
   },
