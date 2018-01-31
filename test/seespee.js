@@ -8,7 +8,7 @@ describe('seespee', function () {
         httpception();
     });
 
-    it('should complain if no HTML asset is found or redirected to', function () {
+    it('should complain if no HTML asset is found or redirected to', async function () {
         httpception({
             request: 'GET http://www.example.com/',
             response: {
@@ -19,14 +19,14 @@ describe('seespee', function () {
             }
         });
 
-        return expect(
-            () => seespee('http://www.example.com/'),
+        await expect(
+            seespee('http://www.example.com/'),
             'to be rejected with',
             new Error('No HTML assets found (http://www.example.com/)')
         );
     });
 
-    it('should populate from an external host', function () {
+    it('should populate from an external host', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -53,16 +53,16 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html').then(function (result) {
-            expect(
-                result.contentSecurityPolicy,
-                'to equal',
-                "default-src 'none'; style-src 'self'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
-            );
-        });
+        expect(
+            await seespee('http://www.example.com/index.html'),
+            'to satisfy',
+            {
+                contentSecurityPolicy: "default-src 'none'; style-src 'self'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
+            }
+        );
     });
 
-    it('should follow http redirects to the same origin', function () {
+    it('should follow http redirects to the same origin', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/',
@@ -84,14 +84,17 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/')
-        .then(result => expect(result, 'to satisfy', {
-            url: 'http://www.example.com/somewhere/',
-            contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
-        }));
+        expect(
+            await seespee('http://www.example.com/'),
+            'to satisfy',
+            {
+                url: 'http://www.example.com/somewhere/',
+                contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
+            }
+        );;
     });
 
-    it('should follow http redirects to other origins', function () {
+    it('should follow http redirects to other origins', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/',
@@ -113,15 +116,16 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/').then(function (result) {
-            expect(result, 'to satisfy', {
+        expect(
+            await seespee('http://www.example.com/'),
+            'to satisfy', {
                 url: 'http://www.somewhereelse.com/',
                 contentSecurityPolicy: "default-src 'none'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
-            });
-        });
+            }
+        );
     });
 
-    it('should support an existing policy given as a string', function () {
+    it('should support an existing policy given as a string', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -148,16 +152,18 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html', {
-            include: "script-src foobar.com; object-src 'none'"
-        }).then(function (result) {
-            expect(result, 'to satisfy', {
+        expect(
+            await seespee('http://www.example.com/index.html', {
+                include: "script-src foobar.com; object-src 'none'"
+            }),
+            'to satisfy',
+            {
                 contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
-            });
-        });
+            }
+        );
     });
 
-    it('should support an existing policy given as a Content-Security-Policy response header', function () {
+    it('should support an existing policy given as a Content-Security-Policy response header', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -185,14 +191,16 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html').then(function (result) {
-            expect(result, 'to satisfy', {
+        expect(
+            await seespee('http://www.example.com/index.html'),
+            'to satisfy',
+            {
                 contentSecurityPolicy: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
-            });
-        });
+            }
+        );
     });
 
-    it('should support an existing policy given as a Content-Security-Policy-Report-Only response header', function () {
+    it('should support an existing policy given as a Content-Security-Policy-Report-Only response header', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -220,16 +228,18 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html').then(function (result) {
-            expect(result, 'to satisfy', {
+        expect(
+            await seespee('http://www.example.com/index.html'),
+            'to satisfy',
+            {
                 contentSecurityPolicy: undefined,
                 contentSecurityPolicyReportOnly: "script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline' foobar.com; object-src 'none'; style-src 'self'"
-            });
-        });
+            }
+        );
     });
 
     describe('when targetting CSP level 1', function () {
-        it('should add \'unsafe-inline\' when there are inline scripts and stylesheets, rather than hashes, which are level 2', function () {
+        it('should add \'unsafe-inline\' when there are inline scripts and stylesheets, rather than hashes, which are level 2', async function () {
             httpception([
                 {
                     request: 'GET http://www.example.com/index.html',
@@ -247,16 +257,14 @@ describe('seespee', function () {
                 }
             ]);
 
-            return seespee('http://www.example.com/index.html', { level: 1 }).then(function (result) {
-                expect(result, 'to satisfy', {
-                    contentSecurityPolicy: "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
-                });
-            });
+            const { contentSecurityPolicy } = await seespee('http://www.example.com/index.html', { level: 1 });
+
+            expect(contentSecurityPolicy, 'to equal', "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'");
         });
     });
 
     describe('when targetting CSP level 2', function () {
-        it('should hash inline stylesheets and scripts', function () {
+        it('should hash inline stylesheets and scripts', async function () {
             httpception([
                 {
                     request: 'GET http://www.example.com/index.html',
@@ -274,14 +282,12 @@ describe('seespee', function () {
                 }
             ]);
 
-            return seespee('http://www.example.com/index.html', { level: 2 }).then(function (result) {
-                expect(result, 'to satisfy', {
-                    contentSecurityPolicy: "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'"
-                });
-            });
+            const { contentSecurityPolicy } = await seespee('http://www.example.com/index.html', { level: 2 });
+
+            expect(contentSecurityPolicy, 'to equal', "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'; script-src 'sha256-bAUA9vTw1GbyqKZp5dovTxTQ+VBAw7L9L6c2ULDtcqI=' 'unsafe-inline'");
         });
 
-        it('should include the full path to external JavaScript and CSS assets, but not images', function () {
+        it('should include the full path to external JavaScript and CSS assets, but not images', async function () {
             httpception([
                 {
                     request: 'GET http://www.example.com/index.html',
@@ -327,15 +333,13 @@ describe('seespee', function () {
                 }
             ]);
 
-            return seespee('http://www.example.com/index.html', { level: 2 }).then(function (result) {
-                expect(result, 'to satisfy', {
-                    contentSecurityPolicy: "default-src 'none'; style-src cdn.example.com/styles.css; script-src cdn.example.com/script.js; img-src cdn.example.com"
-                });
-            });
+            const { contentSecurityPolicy } = await seespee('http://www.example.com/index.html', { level: 2 });
+
+            expect(contentSecurityPolicy, 'to equal', "default-src 'none'; style-src cdn.example.com/styles.css; script-src cdn.example.com/script.js; img-src cdn.example.com");
         });
     });
 
-    it('should honor the ignoreExisting option', function () {
+    it('should honor the ignoreExisting option', async function () {
         httpception([
             {
                 request: 'GET http://www.example.com/index.html',
@@ -354,10 +358,8 @@ describe('seespee', function () {
             }
         ]);
 
-        return seespee('http://www.example.com/index.html', { ignoreExisting: true }).then(function (result) {
-            expect(result, 'to satisfy', {
-                contentSecurityPolicy: "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'"
-            });
-        });
+        const { contentSecurityPolicy } = await seespee('http://www.example.com/index.html', { ignoreExisting: true });
+
+        expect(contentSecurityPolicy, 'to equal', "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'");
     });
 });
