@@ -80,35 +80,48 @@ describe('cli', function () {
         });
 
         it('should fail when some resources are not covered by the existing CSP', async function () {
-            await expect([
-                '--validate',
-                pathModule.relative(
-                    process.cwd(),
-                    pathModule.resolve(
-                        __dirname,
-                        '..',
-                        'testdata',
-                        'existingIncompleteCsp',
-                        'index.html'
+            await expect(
+                [
+                    '--validate',
+                    pathModule.relative(
+                        process.cwd(),
+                        pathModule.resolve(
+                            __dirname,
+                            '..',
+                            'testdata',
+                            'existingIncompleteCsp',
+                            'index.html'
+                        )
                     )
-                )
-            ], 'to error with', 'Missing directives:\n  script-src \'self\';\n    testdata/existingIncompleteCsp/script.js\n');
+                ],
+                'to error with',
+                ' ✘ ERROR: Validation failed: The Content-Security-Policy does not whitelist the following resources:\n' +
+                '            script-src \'self\';\n' +
+                '              testdata/existingIncompleteCsp/script.js\n'
+            );
         });
 
         it('should fail when there is no CSP', async function () {
-            await expect([
-                '--validate',
-                pathModule.relative(
-                    process.cwd(),
-                    pathModule.resolve(
-                        __dirname,
-                        '..',
-                        'testdata',
-                        'noExistingCsp',
-                        'index.html'
+            await expect(
+                [
+                    '--validate',
+                    pathModule.relative(
+                        process.cwd(),
+                        pathModule.resolve(
+                            __dirname,
+                            '..',
+                            'testdata',
+                            'noExistingCsp',
+                            'index.html'
+                        )
                     )
-                )
-            ], 'to error with', 'No existing Content-Security-Policy\n');
+                ],
+                'to error with',
+                ' ✘ ERROR: Validation failed: No existing Content-Security-Policy\n' +
+                ' ✘ ERROR: Validation failed: The Content-Security-Policy does not whitelist the following resources:\n' +
+                '            script-src \'self\';\n' +
+                '              testdata/noExistingCsp/script.js\n'
+            );
         });
     });
 });
