@@ -362,4 +362,28 @@ describe('seespee', function () {
 
         expect(contentSecurityPolicy, 'to equal', "default-src 'none'; style-src 'sha256-PxmT6t1HcvKET+AaUXzreq0LE2ftJs0cvaXtDT1sBCo=' 'unsafe-inline'");
     });
+
+    it('should use a custom User-Agent when the userAgent option is specified', async function () {
+        httpception([
+            {
+                request: {
+                    url: 'GET http://www.example.com/index.html',
+                    headers: {
+                        'User-Agent': 'foobarquux'
+                    }
+                },
+                response: {
+                    headers: {
+                        'Content-Type': 'text/html; charset=utf-8',
+                        'Content-Security-Policy': 'style-src \'unsafe-inline\''
+                    },
+                    body:
+                        '<!DOCTYPE html>' +
+                        '<html></html>'
+                }
+            }
+        ]);
+
+        await seespee('http://www.example.com/index.html', { userAgent: 'foobarquux' });
+    });
 });
