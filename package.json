@@ -22,11 +22,11 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "assetgraph": "^4.0.0",
-    "chalk": "^1.1.3",
+    "chalk": "^2.4.1",
     "lodash": "^4.16.4",
     "magicpen": "^5.12.0",
     "magicpen-prism": "^2.4.0",
-    "urltools": "^0.4.1",
+    "urltools": "^0.2.1",
     "yargs": "^11.0.0"
   },
   "bin": {
