@@ -33,7 +33,7 @@
     "seespee": "lib/cli.js"
   },
   "devDependencies": {
-    "coveralls": "^2.11.14",
+    "coveralls": "^3.0.1",
     "eslint": "^4.19.1",
     "eslint-config-pretty-standard": "^1.4.1",
     "eslint-plugin-prettier": "^2.6.0",
