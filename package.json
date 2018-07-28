@@ -21,7 +21,7 @@
   "author": "Andreas Lind <andreaslindpetersen@gmail.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "assetgraph": "^4.0.0",
+    "assetgraph": "^5.0.0",
     "chalk": "^2.4.1",
     "lodash": "^4.16.4",
     "magicpen": "^5.12.0",
