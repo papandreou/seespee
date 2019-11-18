@@ -27,7 +27,7 @@
     "magicpen": "^6.0.2",
     "magicpen-prism": "^3.0.1",
     "urltools": "^0.2.1",
-    "yargs": "^14.0.0"
+    "yargs": "^15.0.1"
   },
   "bin": {
     "seespee": "lib/cli.js"
