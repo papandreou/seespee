@@ -140,7 +140,7 @@ to mitigate this.
 
 ```js
 var seespee = require('seespee');
-seespee('https://github.com/').then(function(result) {
+seespee('https://github.com/').then(function (result) {
   console.log(result.contentSecurityPolicy);
   // default-src \'none\'; style-src https://assets-cdn.github.com; ...
 });
@@ -153,8 +153,8 @@ properties:
 var seespee = require('seespee');
 seespee('https://github.com/', {
   include: 'report-uri: /tell-what-happened/',
-  ignoreMeta: true
-}).then(function(result) {
+  ignoreMeta: true,
+}).then(function (result) {
   // ...
 });
 ```
@@ -167,8 +167,8 @@ var seespee = require('seespee');
 seespee('/path/to/my/website/main/index.html', {
   root: '/path/to/my/website/',
   include: 'report-uri: /tell-what-happened/',
-  ignoreMeta: true
-}).then(function(result) {
+  ignoreMeta: true,
+}).then(function (result) {
   // ...
 });
 ```
