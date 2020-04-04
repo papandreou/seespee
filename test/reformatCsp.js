@@ -1,8 +1,8 @@
 const reformatCsp = require('../lib/reformatCsp');
 const expect = require('unexpected');
 
-describe('reformatCsp', function() {
-  it('should make a section for each directive', function() {
+describe('reformatCsp', function () {
+  it('should make a section for each directive', function () {
     expect(
       reformatCsp('foo bar quux; baz yadda;'),
       'to equal',
@@ -10,7 +10,7 @@ describe('reformatCsp', function() {
     );
   });
 
-  it('should reflow when a line exceeds 80 chars (default maxWidth)', function() {
+  it('should reflow when a line exceeds 80 chars (default maxWidth)', function () {
     expect(
       reformatCsp(
         '12345678 000000000 111111111 222222222 333333333 444444444 555555555 666666666 777777777 888888888 ' +
@@ -23,7 +23,7 @@ describe('reformatCsp', function() {
     );
   });
 
-  it('should honor a custom maxWidth', function() {
+  it('should honor a custom maxWidth', function () {
     expect(
       reformatCsp(
         '000000000 111111111 222222222 333333333 444444444 555555555 666666666 777777777 888888888 999999999 aaaaaaaaa',

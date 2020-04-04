@@ -4,7 +4,7 @@ function consumeStream(stream) {
   return new Promise((resolve, reject) => {
     const buffers = [];
     stream
-      .on('data', buffer => buffers.push(buffer))
+      .on('data', (buffer) => buffers.push(buffer))
       .on('end', () => resolve(Buffer.concat(buffers)))
       .on('error', reject);
   });
@@ -19,7 +19,7 @@ async function run(commandAndArgs, stdin) {
 
   const promises = {
     exit: new Promise((resolve, reject) => {
-      proc.on('error', reject).on('exit', exitCode => {
+      proc.on('error', reject).on('exit', (exitCode) => {
         if (exitCode === 0) {
           resolve();
         } else {
@@ -33,7 +33,7 @@ async function run(commandAndArgs, stdin) {
       proc.stdin.on('error', reject).on('close', resolve);
     }),
     stdout: consumeStream(proc.stdout),
-    stderr: consumeStream(proc.stderr)
+    stderr: consumeStream(proc.stderr),
   };
 
   if (typeof stdin === 'undefined') {

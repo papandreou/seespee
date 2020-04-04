@@ -11,7 +11,7 @@ expect.addAssertion(
     try {
       [stdout, stderr] = await run([
         pathModule.resolve(__dirname, '..', 'lib', 'cli.js'),
-        ...args
+        ...args,
       ]);
     } catch (err) {
       if (err.stderr) {
@@ -39,7 +39,7 @@ expect.addAssertion(
     try {
       [stdout, stderr] = await run([
         pathModule.resolve(__dirname, '..', 'lib', 'cli.js'),
-        ...args
+        ...args,
       ]);
     } catch (_err) {
       err = _err;
@@ -60,8 +60,8 @@ expect.addAssertion(
   }
 );
 
-describe('cli', function() {
-  it('should generate a Content-Security-Policy from a local HTML file with no CSP meta tag', async function() {
+describe('cli', function () {
+  it('should generate a Content-Security-Policy from a local HTML file with no CSP meta tag', async function () {
     await expect(
       [
         pathModule.relative(
@@ -73,15 +73,15 @@ describe('cli', function() {
             'noExistingCsp',
             'index.html'
           )
-        )
+        ),
       ],
       'to yield output',
       "Content-Security-Policy:\n  default-src 'none';\n  script-src 'self';\n"
     );
   });
 
-  describe('in --validate mode', function() {
-    it('should succeed when there is a CSP meta tag that covers all the resources that are used', async function() {
+  describe('in --validate mode', function () {
+    it('should succeed when there is a CSP meta tag that covers all the resources that are used', async function () {
       await expect(
         [
           '--validate',
@@ -94,14 +94,14 @@ describe('cli', function() {
               'existingCompleteCsp',
               'index.html'
             )
-          )
+          ),
         ],
         'to yield output',
         "Content-Security-Policy:\n  default-src 'none';\n  script-src 'self';\n"
       );
     });
 
-    it('should fail when some resources are not covered by the existing CSP', async function() {
+    it('should fail when some resources are not covered by the existing CSP', async function () {
       await expect(
         [
           '--validate',
@@ -114,7 +114,7 @@ describe('cli', function() {
               'existingIncompleteCsp',
               'index.html'
             )
-          )
+          ),
         ],
         'to error with',
         ' ✘ ERROR: Validation failed: The Content-Security-Policy does not whitelist the following resources:\n' +
@@ -123,7 +123,7 @@ describe('cli', function() {
       );
     });
 
-    it('should fail when there is no CSP', async function() {
+    it('should fail when there is no CSP', async function () {
       await expect(
         [
           '--validate',
@@ -136,7 +136,7 @@ describe('cli', function() {
               'noExistingCsp',
               'index.html'
             )
-          )
+          ),
         ],
         'to error with',
         ' ✘ ERROR: Validation failed: No existing Content-Security-Policy\n' +

@@ -5,8 +5,8 @@
   "main": "lib/seespee.js",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint .",
-    "ci": "npm test && npm run lint && npm run coverage",
+    "lint": "eslint . && prettier --check '**/*.{js,md}'",
+    "test:ci": "npm run coverage",
     "coverage": "nyc --reporter=lcov --reporter=text --all -- mocha && echo google-chrome coverage/lcov-report/index.html"
   },
   "repository": {
@@ -45,7 +45,7 @@
     "httpception": "^3.0.0",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
-    "prettier": "~1.19.1",
+    "prettier": "~2.0.2",
     "unexpected": "^11.0.0"
   },
   "nyc": {
