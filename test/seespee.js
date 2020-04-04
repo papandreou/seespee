@@ -367,11 +367,12 @@ describe('seespee', function () {
       },
     ]);
 
-    const {
-      contentSecurityPolicy,
-    } = await seespee('http://www.example.com/index.html', {
-      ignoreExisting: true,
-    });
+    const { contentSecurityPolicy } = await seespee(
+      'http://www.example.com/index.html',
+      {
+        ignoreExisting: true,
+      }
+    );
 
     expect(
       contentSecurityPolicy,
