@@ -5,8 +5,8 @@
   "main": "lib/seespee.js",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint .",
-    "ci": "npm test && npm run lint && npm run coverage",
+    "lint": "eslint . && prettier --check '**/*.{js,md}'",
+    "test:ci": "npm run coverage",
     "coverage": "nyc --reporter=lcov --reporter=text --all -- mocha && echo google-chrome coverage/lcov-report/index.html"
   },
   "repository": {
