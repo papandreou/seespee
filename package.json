@@ -46,7 +46,7 @@
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "prettier": "~2.2.0",
-    "unexpected": "^11.0.0"
+    "unexpected": "^12.0.0"
   },
   "nyc": {
     "include": [
