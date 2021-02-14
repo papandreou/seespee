@@ -25,7 +25,7 @@
     "chalk": "^4.0.0",
     "lodash": "^4.16.4",
     "magicpen": "^6.0.2",
-    "magicpen-prism": "^4.0.0",
+    "magicpen-prism": "^5.0.0",
     "urltools": "^0.2.1",
     "yargs": "^16.0.3"
   },
