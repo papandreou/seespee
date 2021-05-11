@@ -76,8 +76,7 @@ describe('seespee', function () {
           headers: {
             'Content-Type': 'text/html; charset=utf-8',
           },
-          body:
-            '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>',
+          body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>',
         },
       },
     ]);
@@ -106,8 +105,7 @@ describe('seespee', function () {
           headers: {
             'Content-Type': 'text/html; charset=utf-8',
           },
-          body:
-            '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>',
+          body: '<!DOCTYPE html><html><head></head><body><script>alert("foo");</script></body></html>',
         },
       },
     ]);
@@ -248,9 +246,10 @@ describe('seespee', function () {
         },
       ]);
 
-      const {
-        contentSecurityPolicy,
-      } = await seespee('http://www.example.com/index.html', { level: 1 });
+      const { contentSecurityPolicy } = await seespee(
+        'http://www.example.com/index.html',
+        { level: 1 }
+      );
 
       expect(
         contentSecurityPolicy,
@@ -279,9 +278,10 @@ describe('seespee', function () {
         },
       ]);
 
-      const {
-        contentSecurityPolicy,
-      } = await seespee('http://www.example.com/index.html', { level: 2 });
+      const { contentSecurityPolicy } = await seespee(
+        'http://www.example.com/index.html',
+        { level: 2 }
+      );
 
       expect(
         contentSecurityPolicy,
@@ -336,9 +336,10 @@ describe('seespee', function () {
         },
       ]);
 
-      const {
-        contentSecurityPolicy,
-      } = await seespee('http://www.example.com/index.html', { level: 2 });
+      const { contentSecurityPolicy } = await seespee(
+        'http://www.example.com/index.html',
+        { level: 2 }
+      );
 
       expect(
         contentSecurityPolicy,
