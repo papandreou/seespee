@@ -1,7 +1,7 @@
-var expect = require('unexpected').clone();
+const expect = require('unexpected').clone();
 
-var seespee = require('../lib/seespee');
-var httpception = require('httpception');
+const seespee = require('../lib/seespee');
+const httpception = require('httpception');
 
 describe('seespee', function () {
   beforeEach(function () {
