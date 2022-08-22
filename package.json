@@ -1,6 +1,6 @@
 {
   "name": "seespee",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Create a Content-Security-Policy for a website based on the statically decidable relations",
   "main": "lib/seespee.js",
   "scripts": {
